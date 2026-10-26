@@ -90,3 +90,5 @@ git push -u origin main
 - **v0.2**: registrazione e login (US-01, US-02), area staff protetta, pagina "Le mie prenotazioni", cancellazione delle prenotazioni (US-12)
 - **v0.3**: annullamento evento con notifica email (US-11), pagamenti PayPal (US-10), lista d'attesa (US-13)
 - **in seguito**: persistenza su database
+
+Test
