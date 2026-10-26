@@ -1,0 +1,52 @@
+<%- include('../partials/header') %>
+
+<p><a href="/staff" class="back">← Area staff</a></p>
+<h1>Nuovo evento</h1>
+
+<form method="post" action="/staff/events" class="form card-form" novalidate>
+  <label>Titolo
+    <input name="title" value="<%= values.title || '' %>" class="<%= errors.title ? 'invalid' : '' %>" required>
+    <% if (errors.title) { %><span class="field-error"><%= errors.title %></span><% } %>
+  </label>
+
+  <label>Tipo
+    <select name="type" class="<%= errors.type ? 'invalid' : '' %>" required>
+      <option value="">— Seleziona —</option>
+      <% types.forEach(function (t) { %>
+        <option value="<%= t %>" <%= values.type === t ? 'selected' : '' %>><%= t %></option>
+      <% }) %>
+    </select>
+    <% if (errors.type) { %><span class="field-error"><%= errors.type %></span><% } %>
+  </label>
+
+  <label>Descrizione
+    <textarea name="description" rows="3"><%= values.description || '' %></textarea>
+  </label>
+
+  <div class="form-row">
+    <label>Data e ora
+      <input type="datetime-local" name="date" value="<%= values.date || '' %>" class="<%= errors.date ? 'invalid' : '' %>" required>
+      <% if (errors.date) { %><span class="field-error"><%= errors.date %></span><% } %>
+    </label>
+    <label>Luogo
+      <input name="location" value="<%= values.location || '' %>" class="<%= errors.location ? 'invalid' : '' %>" required>
+      <% if (errors.location) { %><span class="field-error"><%= errors.location %></span><% } %>
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>Costo (€)
+      <input type="number" name="cost" step="0.01" value="<%= values.cost ?? '' %>" class="<%= errors.cost ? 'invalid' : '' %>" required>
+      <span class="hint">Per i DJ Set il costo è sempre 0.</span>
+      <% if (errors.cost) { %><span class="field-error"><%= errors.cost %></span><% } %>
+    </label>
+    <label>Capienza massima
+      <input type="number" name="capacity" step="1" value="<%= values.capacity ?? '' %>" class="<%= errors.capacity ? 'invalid' : '' %>" required>
+      <% if (errors.capacity) { %><span class="field-error"><%= errors.capacity %></span><% } %>
+    </label>
+  </div>
+
+  <button class="btn primary" type="submit">Salva</button>
+</form>
+
+<%- include('../partials/footer') %>

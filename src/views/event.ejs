@@ -1,0 +1,71 @@
+<%- include('partials/header') %>
+<%
+  const labels = {
+    'Concerto': 'Prenota Posto',
+    'DJ Set': 'Ottieni Pass Gratuito',
+    'Workshop': 'Invia Richiesta di Iscrizione'
+  };
+  const soldOut = event.available === 0;
+  const isPast = new Date(event.date) <= new Date();
+%>
+
+<p><a href="/" class="back">← Tutti gli eventi</a></p>
+
+<% if (typeof created !== 'undefined' && created) { %>
+  <div class="alert success">Evento creato con successo: ora è visibile nel catalogo.</div>
+<% } %>
+
+<article class="detail">
+  <div class="detail-main">
+    <span class="badge <%= h.typeClass(event.type) %>"><%= event.type %></span>
+    <h1><%= event.title %></h1>
+    <p class="meta">📅 <%= h.formatDate(event.date) %></p>
+    <p class="meta">📍 <%= event.location %></p>
+    <% if (event.description) { %><p class="description"><%= event.description %></p><% } %>
+
+    <dl class="facts">
+      <div><dt>Prezzo</dt><dd><%= h.formatPrice(event.cost) %></dd></div>
+      <div><dt>Capienza totale</dt><dd><%= event.capacity %></dd></div>
+      <div><dt>Posti disponibili</dt><dd class="<%= soldOut ? 'full' : '' %>"><%= event.available %></dd></div>
+    </dl>
+  </div>
+
+  <aside class="detail-side">
+    <h2><%= event.type === 'Workshop' ? 'Richiedi l\'iscrizione' : 'Prenota' %></h2>
+
+    <% if (event.type === 'Workshop') { %>
+      <p class="hint">Le iscrizioni ai workshop vengono approvate manualmente dallo staff.</p>
+    <% } else if (event.type === 'DJ Set') { %>
+      <p class="hint">Ingresso libero: riceverai subito il tuo pass digitale.</p>
+    <% } else { %>
+      <p class="hint">Ti verrà assegnato automaticamente un posto numerato.</p>
+    <% } %>
+
+    <% if (errors.general) { %><div class="alert error"><%= errors.general %></div><% } %>
+
+    <% if (isPast) { %>
+      <div class="alert">Questo evento si è già svolto.</div>
+    <% } else if (soldOut) { %>
+      <div class="alert error">
+        <%= event.type === 'Concerto' ? 'Posti esauriti per questo spettacolo'
+          : event.type === 'DJ Set' ? 'Il locale è al completo: non ci sono più pass disponibili.'
+          : 'Il Workshop ha raggiunto il numero massimo di iscritti.' %>
+      </div>
+      <button class="btn" disabled><%= labels[event.type] %></button>
+    <% } else { %>
+      <form method="post" action="/events/<%= event.id %>/bookings" class="form" novalidate>
+        <label>Nome e cognome
+          <input name="name" value="<%= values.name || '' %>" class="<%= errors.name ? 'invalid' : '' %>" required>
+          <% if (errors.name) { %><span class="field-error"><%= errors.name %></span><% } %>
+        </label>
+        <label>Email
+          <input type="email" name="email" value="<%= values.email || '' %>" class="<%= errors.email ? 'invalid' : '' %>" required>
+          <% if (errors.email) { %><span class="field-error"><%= errors.email %></span><% } %>
+        </label>
+        <button class="btn primary" type="submit"><%= labels[event.type] %></button>
+      </form>
+    <% } %>
+  </aside>
+</article>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,18 @@
+<%- include('partials/header') %>
+
+<section class="hero">
+  <h1>Eventi in programma</h1>
+  <p>Concerti, workshop e DJ set: scegli l'evento e prenota il tuo posto.</p>
+</section>
+
+<% if (events.length === 0) { %>
+  <div class="empty">Al momento non ci sono eventi in programma. Torna a trovarci!</div>
+<% } else { %>
+  <div class="grid">
+    <% events.forEach(function (event) { %>
+      <%- include('partials/event-card', { event }) %>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

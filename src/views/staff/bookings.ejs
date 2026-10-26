@@ -1,0 +1,74 @@
+<%- include('../partials/header') %>
+
+<p><a href="/staff" class="back">← Area staff</a></p>
+<h1>Prenotazioni</h1>
+<p class="meta">
+  <span class="badge <%= h.typeClass(event.type) %>"><%= event.type %></span>
+  <strong><%= event.title %></strong> · <%= h.formatDate(event.date) %> ·
+  <%= event.occupied %> / <%= event.capacity %> posti occupati
+</p>
+
+<% if (message) { %><div class="alert success"><%= message %></div><% } %>
+<% if (error) { %><div class="alert error"><%= error %></div><% } %>
+
+<form method="get" class="filter">
+  <label>Mostra solo:
+    <select name="status" onchange="this.form.submit()">
+      <option value="">Tutti gli stati</option>
+      <% statuses.forEach(function (s) { %>
+        <option value="<%= s %>" <%= status === s ? 'selected' : '' %>><%= s %></option>
+      <% }) %>
+    </select>
+  </label>
+  <noscript><button class="btn small">Filtra</button></noscript>
+</form>
+
+<% if (bookings.length === 0) { %>
+  <div class="empty">Nessuna prenotazione<%= status ? ' con stato “' + status + '”' : '' %>.</div>
+<% } else { %>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Nome</th><th>Email</th><th>Data prenotazione</th>
+          <% if (event.type === 'Concerto') { %><th>Posto</th><% } %>
+          <th>Importo</th><th>Stato</th>
+          <% if (event.type === 'Workshop') { %><th>Azioni</th><% } %>
+        </tr>
+      </thead>
+      <tbody>
+        <% bookings.forEach(function (b) { %>
+          <tr>
+            <td><%= b.id %></td>
+            <td><%= b.name %></td>
+            <td><%= b.email %></td>
+            <td><%= h.formatDate(b.createdAt) %></td>
+            <% if (event.type === 'Concerto') { %><td><%= b.seatNumber || '—' %></td><% } %>
+            <td><%= h.formatPrice(b.amount) %></td>
+            <td>
+              <span class="status <%= h.statusClass(b.status) %>"><%= b.status %></span>
+              <% if (b.note) { %><div class="hint"><%= b.note %></div><% } %>
+            </td>
+            <% if (event.type === 'Workshop') { %>
+              <td>
+                <% if (b.status === 'In attesa di approvazione') { %>
+                  <div class="actions">
+                    <form method="post" action="/staff/bookings/<%= b.id %>/approve">
+                      <button class="btn small ok">Approva</button>
+                    </form>
+                    <form method="post" action="/staff/bookings/<%= b.id %>/reject" class="reject">
+                      <input name="note" placeholder="Motivazione" required>
+                      <button class="btn small ko">Rifiuta</button>
+                    </form>
+                  </div>
+                <% } else { %>—<% } %>
+              </td>
+            <% } %>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %>

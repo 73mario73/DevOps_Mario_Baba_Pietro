@@ -1,0 +1,22 @@
+{
+  "name": "gestione-eventi",
+  "version": "0.1.0",
+  "description": "App semplice per la gestione di eventi (Concerti, Workshop, DJ Set) con Node.js ed Express",
+  "main": "src/server.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test \"test/**/*.test.js\""
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.1.0"
+  }
+}

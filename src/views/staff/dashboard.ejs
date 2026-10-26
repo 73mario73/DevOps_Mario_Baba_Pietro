@@ -1,0 +1,37 @@
+<%- include('../partials/header') %>
+
+<section class="hero row">
+  <div>
+    <h1>Area staff</h1>
+    <p>Crea eventi e gestisci le prenotazioni.</p>
+  </div>
+  <a href="/staff/events/new" class="btn primary">+ Nuovo evento</a>
+</section>
+
+<div class="alert info">In questa versione l'area staff è accessibile senza login. L'autenticazione arriverà in una versione successiva.</div>
+
+<% if (events.length === 0) { %>
+  <div class="empty">Nessun evento creato. Inizia con “Nuovo evento”.</div>
+<% } else { %>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Evento</th><th>Tipo</th><th>Data</th><th>Prezzo</th><th>Occupati</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% events.forEach(function (e) { %>
+          <tr>
+            <td><a href="/events/<%= e.id %>"><%= e.title %></a></td>
+            <td><span class="badge <%= h.typeClass(e.type) %>"><%= e.type %></span></td>
+            <td><%= h.formatDate(e.date) %></td>
+            <td><%= h.formatPrice(e.cost) %></td>
+            <td><%= e.occupied %> / <%= e.capacity %></td>
+            <td><a href="/staff/events/<%= e.id %>/bookings" class="btn small">Prenotazioni</a></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %>

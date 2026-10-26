@@ -1,0 +1,37 @@
+<%- include('partials/header') %>
+<% const e = booking.event; %>
+
+<div class="ticket">
+  <% if (booking.status === 'In attesa di approvazione') { %>
+    <div class="alert info">La tua richiesta è al vaglio degli organizzatori, riceverai una mail a breve.</div>
+  <% } else if (booking.status === 'Approvata') { %>
+    <div class="alert success">La tua iscrizione è stata approvata dallo staff.</div>
+  <% } else if (booking.status === 'Rifiutata') { %>
+    <div class="alert error">La tua richiesta non è stata accettata.<% if (booking.note) { %> Motivazione: <%= booking.note %><% } %></div>
+  <% } else { %>
+    <div class="alert success">Prenotazione confermata!</div>
+  <% } %>
+
+  <div class="ticket-body">
+    <span class="badge <%= h.typeClass(e.type) %>"><%= e.type %></span>
+    <h1><%= e.title %></h1>
+    <p class="meta">📅 <%= h.formatDate(e.date) %> · 📍 <%= e.location %></p>
+
+    <% if (booking.seatNumber) { %>
+      <div class="seat">Posto numero <strong><%= booking.seatNumber %></strong></div>
+    <% } else if (e.type === 'DJ Set') { %>
+      <div class="seat">PASS DIGITALE <strong>#<%= String(booking.id).padStart(5, '0') %></strong></div>
+    <% } %>
+
+    <dl class="facts">
+      <div><dt>Intestatario</dt><dd><%= booking.name %></dd></div>
+      <div><dt>Email</dt><dd><%= booking.email %></dd></div>
+      <div><dt>Importo</dt><dd><%= h.formatPrice(booking.amount) %></dd></div>
+      <div><dt>Stato</dt><dd><span class="status <%= h.statusClass(booking.status) %>"><%= booking.status %></span></dd></div>
+      <div><dt>Codice prenotazione</dt><dd>#<%= booking.id %></dd></div>
+    </dl>
+  </div>
+  <p><a href="/" class="back">← Torna agli eventi</a></p>
+</div>
+
+<%- include('partials/footer') %>

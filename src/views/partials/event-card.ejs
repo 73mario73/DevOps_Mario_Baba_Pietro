@@ -1,0 +1,12 @@
+<a class="card" href="/events/<%= event.id %>">
+  <div class="card-top">
+    <span class="badge <%= h.typeClass(event.type) %>"><%= event.type %></span>
+    <span class="price"><%= h.formatPrice(event.cost) %></span>
+  </div>
+  <h2><%= event.title %></h2>
+  <p class="meta">📅 <%= h.formatDate(event.date) %></p>
+  <p class="meta">📍 <%= event.location %></p>
+  <p class="seats <%= event.available === 0 ? 'full' : '' %>">
+    <%= event.available === 0 ? 'Esaurito' : event.available + ' posti disponibili' %>
+  </p>
+</a>
