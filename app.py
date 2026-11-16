@@ -1,7 +1,7 @@
 # riga cambiata per test regola git
-import os 
+import os
 
-from flask import Flask, jsonify 
+from flask import Flask, jsonify
 
 app = Flask(__name__) 
 EVENTI = [{"id": 1, "titolo": "Jazz in Rocca"}] 
