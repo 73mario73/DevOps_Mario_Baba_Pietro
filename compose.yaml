@@ -1,0 +1,12 @@
+services:
+  api:
+    build: .
+    ports: ["8080:8080"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://...@db:5432/eventi
+  db:
+    image: postgres:17-alpine
+    volumes: ["pgdata:/var/lib/postgresql/data"] 
+# adminer: immagine adminer:4, porta 8081 
+volumes:
+  pgdata:
