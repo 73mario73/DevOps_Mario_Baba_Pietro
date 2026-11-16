@@ -1,4 +1,4 @@
-# app.py 
+# riga cambiata per test regola git
 import os 
 from flask import Flask, jsonify 
 app = Flask(__name__) 
