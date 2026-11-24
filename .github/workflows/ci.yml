@@ -11,9 +11,28 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.13"]
+      
+    # container di servizio: un PostgreSQL
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: eventi
+          POSTGRES_PASSWORD: eventi
+          POSTGRES_DB: eventi
+        ports:
+          - 5432:5432
+        options_ >-
+          --health-cmd "pg_isready -U eventi"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10 
+
     steps:
       - uses: actions/checkout@v5
-
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -21,4 +40,3 @@ jobs:
       - run: pip install -r requirements.txt
       - run: ruff check .
       - run: pytest --cov=app
-      
